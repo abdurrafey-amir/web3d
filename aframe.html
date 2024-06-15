@@ -8,13 +8,20 @@
     <body>
         <a-scene shadow="autoUpdate:true; type: pcf" cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 500">
             <a-assets>
+                <a-asset-item id="car" src="assets/f1/scene.gltf"></a-asset-item>
             </a-assets>
            <a-sky color="blue"></a-sky>
            <a-plane material="color: #999999" rotation="-90 0 0" scale="75 75 0.5"></a-plane>
            <a-entity light="type: ambient; color: #BBB; intensity: 0.7"></a-entity>
            <a-entity light="type: directional; color:#FFFFFF; intensity:1.5; castShadow:true; shadowBias: -0.001; shadowCameraBottom: -50; shadowCameraLeft: -50; shadowCameraRight: 50; shadowCameraTop: 50" position="28.5 38.1 16"></a-entity>
            <a-entity id="map" shadow="cast:true; receive:true"></a-entity>
-           
+           <!-- camera rig / car -->
+           <a-entity id="car-object" movement-controls="speed:0.3;" gltf-model="#car" position="0 0.8 0" scale="0.5 0.5 0.5" rotation="0 0 0">
+            <!-- camera -->
+            <a-entity camera id="camera" position="-1 2 0.6" look-controls active="true">
+                <a-cursor></a-cursor>
+            </a-entity>
+           </a-entity>
            
         </a-scene>
         <script src="script.js"></script>
