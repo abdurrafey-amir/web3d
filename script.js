@@ -25,6 +25,15 @@ function setup() {
     }
 }
 
+var colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white', 'gray', 'cyan', 'magenta', 'lime', 'olive', 'maroon', 'navy', 'teal', 'silver', 'gold', 'indigo', 'violet', 'beige', 'tan', 'khaki', 'salmon', 'coral', 'tomato', 'orange', 'chocolate', 'wheat', 'mint', 'turquoise', 'aquamarine', 'lavender', 'plum', 'orchid', 'rosybrown', 'slategray', 'slategrey', 'steelblue', 'skyblue', 'royalblue', 'powderblue', 'paleturquoise', 'palegreen', 'palegoldenrod', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen']
+
+function randcolor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+var color = randcolor();
+
+
 function addEntity(id, position, scale, rotation) {
     const entity = document.createElement('a-entity');
     entity.setAttribute('id', id);
@@ -32,6 +41,7 @@ function addEntity(id, position, scale, rotation) {
     entity.setAttribute('position', position);
     entity.setAttribute('scale', scale);
     entity.setAttribute('rotation', rotation);
+    entity.setAttribute('color', `${color}`);
     map.appendChild(entity);
 }
 
@@ -40,6 +50,6 @@ function addBuilding(x, z, val) {
         // no object made
     } else if (val == 1) {
         y = 2.5
-        addEntity("#building", `${x} ${y} ${z}`, "5 4 4", "0 0 0")
+        addEntity("#building", `${x} ${y} ${z}`, "5 4 4", "0 0 0", )
     }
 }
