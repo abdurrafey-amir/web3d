@@ -1,4 +1,4 @@
-AFRAME.registerComponent('extended-wasd-controls'), {
+`AFRAME.registerComponent('extended-wasd-controls', {...})`, {
     schema:
     {
         // Basic Structure:
@@ -25,7 +25,7 @@ AFRAME.registerComponent('extended-wasd-controls'), {
         // gears
         parked: {type: 'string', default: "1"},
         drive: {type: 'string', default: "2"},
-        reverse: {type: 'string', defaukt: "3"},
+        reverse: {type: 'string', default: "3"},
         currentGear: {type: 'number', default: 1},
 
         inputType: {type: 'string', default: "keyboard"}
@@ -35,7 +35,7 @@ AFRAME.registerComponent('extended-wasd-controls'), {
     convertKeyName: function(keyName) {
         if (keyName == " ")
             return "Space";
-        else if (keyName.Length == 1)
+        else if (keyName.length == 1)
             return keyName.toUpperCase();
         else
         return keyName;
@@ -57,7 +57,7 @@ AFRAME.registerComponent('extended-wasd-controls'), {
     
     isEmpty: function(xVal, zVal) {
         let j = Math.round((xVal + 2.5*14) / 5);
-        let i = Math.round((zval - 2.5*14) / -5);
+        let i = Math.round((zVal - 2.5*14) / -5);
 
         return moveMap[j][i]
     },
@@ -170,5 +170,48 @@ AFRAME.registerComponent('extended-wasd-controls'), {
 
         let c = MATH.cos(finalTurnAngle);
         let s = MATH.sin(finalTurnAngle);
+
+        // need to reset movePercent values
+        // when querying which keys are currently pressed
+        this.movePercent.y = 0;
+
+        if (this.movePercent.x -0.03 >= 0) {this.movePercent.x -= 0.03;}
+        if (this.movePercent.x +0.03 <= 0) {this.movePercent.x += 0.03;}
+        if (this.movePercent.x < 0.03 && this.movePercent.x > -0.03) {this.movePercent.x = 0;}
+
+        // moving backward and forward
+        if (this.isKeyPressed(this.data.moveBackKey)) {
+            if (this.data.currentGear == 2 && this.data.moveSpeed-1 > 0) { // drive
+                this.data.moveSpeed = 0;
+            }
+            this.movePercent.x = 1;
+        }
+
+        // ---Gamepad input for movement here---
+
+        if (this.data.currentGear == 1) { // parked
+        // no change in movement    
+        } else if (this.data.currentGear == 2) { // drive
+        // only move forward
+            if (this.movePercent.x > 0) {
+                this.movePercent.x = 0;
+            }
+            
+            this.moveVector.set( -s * this.movePercent.z + c * this.movePercent.x, // x
+                1 * this.movePercent.y, // y
+                -c * this.movePercent.z - s * this.movePercent.x).multiplyScalar(moveAmount); // z
+        } else if (this.data.currentGear == 3) { // reverse
+            // only move backwards
+            if (this.movePercent.x < 0) {
+                this.movePercent.x = 0;
+            }
+
+            this.moveVector.set( -s * this.movePercent.z + c * this.movePercent.x, // x
+                1 * this.movePercent.y, // y
+                -c * this.movePercent.z - s * this.movePercent.x).multiplyScalar(moveAmount); // z
+        }
+
+        // update movement
+        this.el.object3D.position.add(this.moveVector);
     }
 }
